@@ -53,7 +53,7 @@ exports.loginUser = async (req, res) => {
       secure: process.env.NODE_ENV === 'production',
     })
     .status(200)
-    .json({id:user.id,role:user.role});
+    .json({ id: user.id, role: user.role });
 };
 exports.checkAuth = async (req, res) => {
   if(req.user){

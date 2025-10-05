@@ -15,20 +15,26 @@ const { join } = require("path");
 const logFile = join(__dirname, "blogchefNew.log"); 
   // create the log file in the current project directory
 
-const allowedOrigins = [process.env.FRONTEND_URL, 'http://localhost:3000'].filter(Boolean);
-server.use(
-  cors({
-    origin: function (origin, callback) {
-      if (!origin || allowedOrigins.includes(origin)) {
-        callback(null, true);
-      } else {
-        callback(new Error('Not allowed by CORS'));
-      }
-    },
-    credentials: true,
-    exposedHeaders: ["X-Total-Count"],
-  })
-);
+const allowedOrigins = [
+  process.env.FRONTEND_URL,
+  'http://localhost:3000',
+  'http://localhost:3001',
+].filter(Boolean);
+
+const corsOptions = {
+  origin: function (origin, callback) {
+    if (!origin || allowedOrigins.includes(origin)) {
+      callback(null, true);
+    } else {
+      callback(new Error('Not allowed by CORS'));
+    }
+  },
+  credentials: true,
+  exposedHeaders: ["X-Total-Count"],
+};
+
+server.use(cors(corsOptions));
+server.options('*', cors(corsOptions));
 // const createProduct= require('./models/Product.js')
 const productRouter = require("./routes/Products.js");
 const categoryRouter = require("./routes/Category.js");
