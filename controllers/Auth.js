@@ -3,6 +3,13 @@ const crypto = require("crypto");
 const { sanitizeUser } = require("../service/comman.js");
 const jwt = require("jsonwebtoken");
 const SECRET_KEY = process.env.SECRET_KEY;
+const isProd = process.env.NODE_ENV === 'production';
+const cookieOptions = {
+  httpOnly: true,
+  maxAge: 60 * 60 * 1000,
+  sameSite: isProd ? 'None' : 'Lax',
+  secure: isProd,
+};
 exports.createUser = async (req, res) => {
   try {
     const salt = crypto.randomBytes(16);
@@ -26,12 +33,7 @@ exports.createUser = async (req, res) => {
           } else {
             const token = jwt.sign(sanitizeUser(response), SECRET_KEY);
             res
-              .cookie("jwt", token, {
-                expires: new Date(Date.now() + 3600000),
-                httpOnly: true,
-                sameSite: process.env.NODE_ENV === 'production' ? 'None' : 'Lax',
-                secure: process.env.NODE_ENV === 'production',
-              })
+              .cookie("jwt", token, cookieOptions)
               .status(200)
               .json(token);
           }
@@ -46,12 +48,7 @@ exports.loginUser = async (req, res) => {
   const user = req.user
   console.log(req.body,"XXXX",req.user)
   res
-    .cookie("jwt", req.user.token, {
-      expires: new Date(Date.now() + 3600000),
-      httpOnly: true,
-      sameSite: process.env.NODE_ENV === 'production' ? 'None' : 'Lax',
-      secure: process.env.NODE_ENV === 'production',
-    })
+    .cookie("jwt", req.user.token, cookieOptions)
     .status(200)
     .json({ id: user.id, role: user.role });
 };
@@ -68,7 +65,10 @@ exports.checkAuth = async (req, res) => {
 
 exports.logoutUser = async (req, res) => {  
   console.log("logout====>", req.cookies);
-  res.clearCookie("jwt").sendStatus(200);
+  res.clearCookie("jwt", {
+    sameSite: isProd ? 'None' : 'Lax',
+    secure: isProd,
+  }).sendStatus(200);
 }
 
   
