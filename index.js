@@ -15,9 +15,16 @@ const { join } = require("path");
 const logFile = join(__dirname, "blogchefNew.log"); 
   // create the log file in the current project directory
 
+const allowedOrigins = [process.env.FRONTEND_URL, 'http://localhost:3000'].filter(Boolean);
 server.use(
   cors({
-    origin: process.env.FRONTEND_URL,
+    origin: function (origin, callback) {
+      if (!origin || allowedOrigins.includes(origin)) {
+        callback(null, true);
+      } else {
+        callback(new Error('Not allowed by CORS'));
+      }
+    },
     credentials: true,
     exposedHeaders: ["X-Total-Count"],
   })
