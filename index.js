@@ -65,7 +65,8 @@ const stripe = require("stripe")(process.env.STRIPE_SECRETE);
 
 
 
-server.use(express.static( path.resolve(__dirname,"build")))
+// server.use(express.static( path.resolve(__dirname,"build")))
+
 server.use(morgan(":method - :url - :date - :response-time ms"));  // morgan template
 server.use(
   morgan(":method -:url - :date - :response-time ms", {

@@ -4,7 +4,7 @@ exports.createOrder = async (req, res) => {
     try {
         const order = new Order(req.body);
 
-        console.log("order recived from frontend",order)
+        console.log("order recived from frontend",req.body)
 
        const result = await order.save()
         res.status(200).json(result);
@@ -21,8 +21,8 @@ exports.fetchOrderByUser = async (req, res) => {
     //  const {user} =req.query
      const {id} = req.user
 
-       const order = await Order.find({user:id})
-
+     const order = await Order.find({user:id})
+     console.log("all order user ===>" , order )
       res.status(200).json(order);
       
     } catch (error) {
