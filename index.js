@@ -15,7 +15,13 @@ const { join } = require("path");
 const logFile = join(__dirname, "blogchefNew.log"); 
   // create the log file in the current project directory
 
-server.use(cors({ exposedHeaders: ["X-Total-Count"] }));
+server.use(
+  cors({
+    origin: process.env.FRONTEND_URL,
+    credentials: true,
+    exposedHeaders: ["X-Total-Count"],
+  })
+);
 // const createProduct= require('./models/Product.js')
 const productRouter = require("./routes/Products.js");
 const categoryRouter = require("./routes/Category.js");
@@ -187,7 +193,7 @@ server.use(express.json());
   }
 });
 //webhook              "whsec_6cadf1fa8f0400fcd3891864afab6220a8b22d1ebd687acb43151dd0083e7ceb"
-const endpointSecret = "process.env.ENDPOINT_SECRETE";
+const endpointSecret = process.env.ENDPOINT_SECRETE;
 
 
 
