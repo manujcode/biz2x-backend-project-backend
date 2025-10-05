@@ -18,7 +18,8 @@ const logFile = join(__dirname, "blogchefNew.log");
 const allowedOrigins = [
   process.env.FRONTEND_URL,
   'http://localhost:3000',
-  'http://localhost:3001'
+  'http://localhost:3001',
+  'https://biz2x-backend-project-frontend.vercel.app',
 ];
 
 server.use(
