@@ -12,7 +12,7 @@ exports.fetchCategory = async (req, res) => {
         res.status(500).send(error);
       }
 };
-
+ 
 exports.createCategory = async (req, res) => {
   try {
       const category = new Category(req.body);

@@ -53,8 +53,9 @@ exports.loginUser = async (req, res) => {
     .json({ id: user.id, role: user.role });
 };
 exports.checkAuth = async (req, res) => {
+   console.log("XXXXXXXX======>",req.user )
   if(req.user){
-    res.json(req.user);
+    json(req.user);
   } 
   else{
     res.sendStatus(401)

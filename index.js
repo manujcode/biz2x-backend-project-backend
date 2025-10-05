@@ -18,24 +18,18 @@ const logFile = join(__dirname, "blogchefNew.log");
 const allowedOrigins = [
   process.env.FRONTEND_URL,
   'http://localhost:3000',
-  'http://localhost:3001',
-  'https://biz2x-backend-project-frontend.vercel.app',
-].filter(Boolean);
+  'http://localhost:3001'
+];
 
-const corsOptions = {
-  origin: function (origin, callback) {
-    if (!origin || allowedOrigins.includes(origin)) {
-      callback(null, true);
-    } else {
-      callback(new Error('Not allowed by CORS'));
-    }
-  },
-  credentials: true,
-  exposedHeaders: ["X-Total-Count"],
-};
-
-server.use(cors(corsOptions));
-server.options('*', cors(corsOptions));
+server.use(
+  cors({
+    origin(origin, cb) {
+      if (!origin || allowedOrigins.includes(origin)) return cb(null, true);
+      return cb(new Error('Not allowed by CORS'));
+    },
+    credentials: true
+  })
+);
 // const createProduct= require('./models/Product.js')
 const productRouter = require("./routes/Products.js");
 const categoryRouter = require("./routes/Category.js");
@@ -254,7 +248,7 @@ server.use("/brands", isAuth(), brandsRouter.router);
 server.use("/users", isAuth(), userRouter.router);
 server.use("/auth", authRouter.router);
 server.use("/cart", isAuth(), cartRouter.router);
-server.use("/orders", isAuth(), orderRouter.router);
+server.use("/orders",(req,res,next)=>{ console.log("++++===+++",req.headers) ;next()}, isAuth(), orderRouter.router);
 main().catch((error) => console.log(error));
 
 async function main() {

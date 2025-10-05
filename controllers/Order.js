@@ -14,15 +14,17 @@ exports.createOrder = async (req, res) => {
         res.status(501).json(error);
         
       }
-};
+}; 
+
+
 exports.fetchOrderByUser = async (req, res) => {
   try {
     //   const product = new Brand(req.body);
     //  const {user} =req.query
-     const {id} = req.user
+     const {id} = req.user.id
 
+     console.log("all order user ===>" , id )
      const order = await Order.find({user:id})
-     console.log("all order user ===>" , order )
       res.status(200).json(order);
       
     } catch (error) {
