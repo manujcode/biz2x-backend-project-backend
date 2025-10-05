@@ -12,7 +12,7 @@ const morgan = require("morgan");
 const {createWriteStream} = require("fs");
 const { join } = require("path");
 
-const logFile = join(__dirname, "blogchefNew.log"); 
+// const logFile = join(__dirname, "blogchefNew.log"); 
   // create the log file in the current project directory
 
 server.use(cors({ exposedHeaders: ["X-Total-Count"] }));
