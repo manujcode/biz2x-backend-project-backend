@@ -6,7 +6,14 @@ const LocalStrategy = require("passport-local").Strategy;
 const mongoose = require("mongoose");
 const server = express();
 const cors = require("cors");
-const morgan = require('morgan')
+
+
+const morgan = require("morgan");
+const {createWriteStream} = require("fs");
+const { join } = require("path");
+
+const logFile = join(__dirname, "blogchefNew.log"); 
+  // create the log file in the current project directory
 
 server.use(cors({ exposedHeaders: ["X-Total-Count"] }));
 // const createProduct= require('./models/Product.js')
@@ -59,7 +66,12 @@ const stripe = require("stripe")(process.env.STRIPE_SECRETE);
 
 
 server.use(express.static( path.resolve(__dirname,"build")))
-
+server.use(morgan(":method - :url - :date - :response-time ms"));  // morgan template
+server.use(
+  morgan(":method -:url - :date - :response-time ms", {
+    stream: createWriteStream(logFile, { flags: "a" }),
+  })
+);
 server.use(cookieParser())
 morgan(':method :url :status :res[content-length] - :response-time ms')
 
@@ -221,7 +233,7 @@ server.use("/brands", isAuth(), brandsRouter.router);
 server.use("/users", isAuth(), userRouter.router);
 server.use("/auth", authRouter.router);
 server.use("/cart", isAuth(), cartRouter.router);
-server.use("/order", isAuth(), orderRouter.router);
+server.use("/orders", isAuth(), orderRouter.router);
 main().catch((error) => console.log(error));
 
 async function main() {

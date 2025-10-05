@@ -60,4 +60,10 @@ exports.checkAuth = async (req, res) => {
 
 
 };
+
+exports.logoutUser = async (req, res) => {  
+  console.log("logout====>", req.cookies);
+  res.clearCookie("jwt").sendStatus(200);
+}
+
   

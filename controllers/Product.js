@@ -14,27 +14,68 @@ exports.createProduct = async (req, res) => {
         res.send(response);
         // console.log(res)
       } catch (error) {
+
         res.status(500).send(error);  
       }
 };
+// exports.myTest = async (req, res) => {
+//    res.send("hello from product");
+// }
 exports.fetchAllProductsFilter = async (req, res) => {
     let query
+
+       query = await Product.find()
+      //  query.map((product)=>{
+      //     return {'title':product.title}
+      //    })
+
+         let n = await Product.find().count()
+         let query1 = []
+         for(let i=0;i<n;i++){
+            if(query[i].brand)
+            query1.push({'brand':query[i].brand})
+         }
+
+         console.log(query1)
    if(req.query.admin){
       query =  Product.find();
    }
    else{
       query =  Product.find({delete:{$ne:true}});
    } 
-        
+      //   console.log("========>>>>>",req.query,query)
         let totalCount =  Product.find({delete:{$ne:true}});
      if( req.query.category){
-        query=query.find({category:req.query.category})
+         let category = req.query.category.split(",")
+         // for(let i=0;i<category.length;i++){
+         //    category[i]=category[i].trim()
+
+         // }
+        query=query.find({category:category})
         totalCount=totalCount.find({category:req.query.category})
      }
      if( req.query.brand){
-        query=query.find({brand:req.query.brand})    
-        totalCount=totalCount.find({brand:req.query.brand})
+        let brand = req.query.brand.split(",")
+      //   let qu 
+      //   for(let i=0;i<brand.length;i++){
+      //        brand[i]=brand[i].trim()
+      //        qu+=
+      //   }
+        query=query.find({brand:brand})
+
+        totalCount=totalCount.find({brand:brand})
      }
+     if( req.query.title){
+      let title = req.query.title.split(",")
+    //   let qu 
+    //   for(let i=0;i<brand.length;i++){
+    //        brand[i]=brand[i].trim()
+    //        qu+=
+    //   }
+      query=query.find({title:title})
+
+      totalCount=totalCount.find({title:title})
+   }
      if( req.query._sort&&req.query._order){
         query=query.sort({[req.query._sort]:req.query._order})
         totalCount=totalCount.sort({[req.query._sort]:req.query._order})
@@ -75,13 +116,17 @@ console.log("hvjhvjhv")
 }
 exports.updateProduct=async(req,res)=>{
    const {id} = req.params
-   console.log("deleted product is XXX+>",id)
+   // console.log("deleted product is XXX+>",id)
    try{
-      const product = new Product(req.body);
-   const response = await Product.findByIdAndUpdate(id,product,{new:true})
+      const product = {...req.body};
+      // console.log("new product is XXX+>>>",product)
+      delete product._id;
+      const response = await Product.findByIdAndUpdate(id,product,{new:true})
+      // console.log("new product is XXX+>>>>>>>",response)
   res.status(200).send(response)
    }
    catch(err){
+      console.log("error in updating product",err)
      res.status(400).send(err)
    }
   

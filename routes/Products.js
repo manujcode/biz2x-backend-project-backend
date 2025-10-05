@@ -3,6 +3,7 @@ const product = require('../controllers/Product.js')
 const router = express.Router()
 router
       .get("/",product.fetchAllProductsFilter)
+      // .get('/test',product.myTest)
       .get("/:id",product.fetchAllProductById)
       .post("/", product.createProduct)
       .patch("/:id",product.updateProduct)

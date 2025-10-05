@@ -4,11 +4,13 @@ exports.createOrder = async (req, res) => {
     try {
         const order = new Order(req.body);
 
+        console.log("order recived from frontend",order)
+
        const result = await order.save()
-        
         res.status(200).json(result);
         
       } catch (error) {
+        console.log("error is ===>",error)
         res.status(501).json(error);
         
       }

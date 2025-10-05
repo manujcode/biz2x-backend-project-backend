@@ -6,4 +6,5 @@ router
       .post("/signUp",auth.createUser)
       .post("/login", passport.authenticate('local'), auth.loginUser)
       .get("/check",passport.authenticate('jwt'),auth.checkAuth)
+      .get("/logout",auth.logoutUser)
 exports.router =router; 
